@@ -11,8 +11,9 @@ export class News extends Component {
       page: 1,
     };
   }
+
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=1&pagesize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=1&pagesize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -23,7 +24,11 @@ export class News extends Component {
     });
   }
   handlePrevPage = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${
+      this.props.category
+    }&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
       this.state.page - 1
     }&pagesize=${this.props.pageSize}`;
     this.setState({ loading: true });
@@ -37,7 +42,11 @@ export class News extends Component {
   };
   handleNextPage = async () => {
     // console.log(Math.ceil(this.state.totalResults / this.state.pageSize));
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&category=${
+      this.props.category
+    }&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
       this.state.page + 1
     }&pagesize=${this.props.pageSize}`;
     this.setState({ loading: true });
@@ -55,7 +64,7 @@ export class News extends Component {
       <div className="container my-3">
         <h1 className="text-center">News Hub - Top Headlines</h1>
         {this.state.loading && <Spinner />}
-        <div className="row">
+        <div className="row" style={{ margin: "2rem 0" }}>
           {!this.state.loading &&
             this.state.articles.map((element) => {
               return (
@@ -79,7 +88,7 @@ export class News extends Component {
             })}
           <div className="container d-flex justify-content-between">
             <button
-              className="btn btn-dark btn-lg"
+              className="btn btn-dark btn"
               onClick={this.handlePrevPage}
               disabled={this.state.page <= 1}
             >
@@ -95,7 +104,7 @@ export class News extends Component {
                   Math.ceil(this.state.totalResults / this.props.pageSize)
                 )
               }
-              className="btn btn-dark btn-lg"
+              className="btn btn-dark btn"
               onClick={this.handleNextPage}
             >
               Next
