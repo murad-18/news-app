@@ -1,10 +1,14 @@
 import React, { Component } from "react";
-
+// import "./Navbar.css";
 export class Navbar extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-expand-lg bg-light">
+        {/* <nav class="navbar bg-primary" data-bs-theme="dark"> */}
+        <nav
+          className="navbar bg-dark border-bottom border-body"
+          data-bs-theme="dark"
+        >
           <div className="container-fluid">
             <a className="navbar-brand" href="/">
               News-HUB

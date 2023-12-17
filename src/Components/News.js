@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import NewsItem from "./NewsItem";
 
 export class News extends Component {
@@ -7,15 +7,53 @@ export class News extends Component {
     this.state = {
       articles: [],
       loading: false,
+      page: 1,
+      pageSize: 18,
     };
   }
   async componentDidMount() {
     let url =
-      "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=344aef2b1daa4b4aaf6da240acfce1ef";
+      "https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef";
     let data = await fetch(url);
     let parsedData = await data.json();
-    this.setState({ articles: parsedData.articles });
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+    });
   }
+  handlePrevPage = async () => {
+    // console.log("Previous");
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
+      this.state.page - 1
+    }&pagesize=${this.state.pageSize}`;
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    this.setState({
+      articles: parsedData.articles,
+      page: this.state.page - 1,
+      pageSize: 18,
+    });
+  };
+  handleNextPage = async () => {
+    console.log(Math.ceil(this.state.totalResults / this.state.pageSize));
+    if (
+      this.state.page + 1 <=
+      Math.ceil(this.state.totalResults / this.state.pageSize)
+    ) {
+      let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
+        this.state.page + 1
+      }&pagesize=${this.state.pageSize}`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+
+      this.setState({
+        articles: parsedData.articles,
+        page: this.state.page + 1,
+        pageSize: 18,
+      });
+    } else {
+    }
+  };
   render() {
     return (
       <div className="container my-3">
@@ -39,6 +77,24 @@ export class News extends Component {
               </div>
             );
           })}
+          <div className="container d-flex justify-content-between">
+            <button
+              className="btn btn-dark btn-lg"
+              onClick={this.handlePrevPage}
+              disabled={this.state.page <= 1}
+            >
+              Previous
+            </button>
+            <h5>
+              Page : <span class="badge bg-dark">{this.state.page}</span>
+            </h5>
+            <button
+              className="btn btn-dark btn-lg"
+              onClick={this.handleNextPage}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     );
