@@ -9,55 +9,38 @@ export class News extends Component {
       articles: [],
       loading: false,
       page: 1,
+      query: "",
     };
   }
-
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=1&pagesize=${this.props.pageSize}`;
+  async updateNews() {
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&q=${this.props.query}&page=${this.state.page}&pagesize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
     let parsedData = await data.json();
+    // console.log(parsedData);
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
       loading: false,
     });
   }
+  async componentDidMount() {
+    this.updateNews();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.query !== this.props.query) {
+      this.updateNews();
+    }
+  }
   handlePrevPage = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${
-      this.props.country
-    }&category=${
-      this.props.category
-    }&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
-      this.state.page - 1
-    }&pagesize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url);
-    let parsedData = await data.json();
-    this.setState({
-      articles: parsedData.articles,
-      page: this.state.page - 1,
-      loading: false,
-    });
+    this.setState({ page: this.state.page - 1 });
+    // console.log(this.state.page);
+    this.updateNews();
   };
   handleNextPage = async () => {
-    // console.log(Math.ceil(this.state.totalResults / this.state.pageSize));
-    let url = `https://newsapi.org/v2/top-headlines?country=${
-      this.props.country
-    }&category=${
-      this.props.category
-    }&apiKey=344aef2b1daa4b4aaf6da240acfce1ef&page=${
-      this.state.page + 1
-    }&pagesize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url);
-    let parsedData = await data.json();
-
-    this.setState({
-      articles: parsedData.articles,
-      page: this.state.page + 1,
-      loading: false,
-    });
+    // console.log(this.state.page);
+    this.setState({ page: this.state.page + 1 });
+    this.updateNews();
   };
   render() {
     return (
@@ -82,6 +65,9 @@ export class News extends Component {
                         : "https://static.vecteezy.com/system/resources/thumbnails/006/299/370/original/world-breaking-news-digital-earth-hud-rotating-globe-rotating-free-video.jpg"
                     }
                     newsUrl={element.url}
+                    author={element.author}
+                    publishedAt={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );
@@ -95,7 +81,7 @@ export class News extends Component {
               Previous
             </button>
             <h5>
-              Page : <span class="badge bg-dark">{this.state.page}</span>
+              Page : <span className="badge bg-dark">{this.state.page}</span>
             </h5>
             <button
               disabled={

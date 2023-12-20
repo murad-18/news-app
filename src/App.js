@@ -4,19 +4,44 @@ import News from "./Components/News";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default class App extends Component {
+  // pageSize = 12;
+  constructor() {
+    super();
+    this.state = {
+      query: "",
+      pageSize: 12,
+    };
+  }
+  handleSearch = (newQuery) => {
+    this.setState({ query: newQuery });
+  };
   render() {
     return (
       <div>
         <Router>
-          <Navbar />
+          <Navbar onSearch={this.handleSearch} />
           <Routes>
             <Route
               exact
               path="/"
               element={
                 <News
+                  query={this.state.query}
                   key="general"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
+                  country="us"
+                  category="general"
+                />
+              }
+            ></Route>
+            <Route
+              exact
+              path="/general"
+              element={
+                <News
+                  query={this.state.query}
+                  key="general"
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="general"
                 />
@@ -27,8 +52,9 @@ export default class App extends Component {
               path="/business"
               element={
                 <News
+                  query={this.state.query}
                   key="business"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="business"
                 />
@@ -39,8 +65,9 @@ export default class App extends Component {
               path="/entertainment"
               element={
                 <News
+                  query={this.state.query}
                   key="entertainment"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="entertainment"
                 />
@@ -51,8 +78,9 @@ export default class App extends Component {
               path="/health"
               element={
                 <News
+                  query={this.state.query}
                   key="health"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="health"
                 />
@@ -63,8 +91,9 @@ export default class App extends Component {
               path="/science"
               element={
                 <News
+                  query={this.state.query}
                   key="science"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="science"
                 />
@@ -75,8 +104,9 @@ export default class App extends Component {
               path="/sports"
               element={
                 <News
+                  query={this.state.query}
                   key="sports"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="sports"
                 />
@@ -87,8 +117,9 @@ export default class App extends Component {
               path="/technology"
               element={
                 <News
+                  query={this.state.query}
                   key="technology"
-                  pageSize={6}
+                  pageSize={this.state.pageSize}
                   country="us"
                   category="technology"
                 />

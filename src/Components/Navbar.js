@@ -3,12 +3,38 @@ import { Link } from "react-router-dom";
 
 // import "./Navbar.css";
 export class Navbar extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchQuery: "",
+    };
+  }
+  handleSearchChange = (event) => {
+    const newQuery = event.target.value;
+    this.setState({ searchQuery: newQuery });
+
+    // Trigger the action when the search bar is empty
+    if (newQuery.trim() === "") {
+      // Perform the desired action, e.g., navigate to the main page or any other action
+      console.log("Search bar is empty. Triggering action...");
+    } else {
+      // If the search bar is not empty, call the onSearch prop
+      if (this.props.onSearch) {
+        this.props.onSearch(newQuery);
+      }
+    }
+  };
+
+  // handleSearchSubmit = (event) => {
+  //   event.preventDefault();
+  //   this.props.onSearch(this.state.searchQuery);
+  // };
   render() {
     return (
       <div>
         {/* <nav className="navbar bg-primary" data-bs-theme="dark"> */}
         {/* <nav className="navbar bg-dark navbar-expand-lg bg-body-tertiary"> */}
-        <nav class="navbar navbar-dark bg-dark navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-dark bg-dark navbar-expand-lg bg-body-tertiary">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
               News Hub
@@ -98,16 +124,22 @@ export class Navbar extends Component {
                   </Link>
                 </li>
               </ul>
-              <form className="d-flex" role="search">
+              <form
+                // onSubmit={this.handleSearchSubmit}
+                className="d-flex"
+                role="search"
+              >
                 <input
-                  className="form-control me-2"
+                  className="form-control me-2 px-3"
                   type="search"
-                  placeholder="Search"
+                  placeholder="Type To Search"
                   aria-label="Search"
+                  value={this.state.searchQuery}
+                  onChange={this.handleSearchChange}
                 />
-                <button className="btn btn-outline-light" type="submit">
+                {/* <button className="btn btn-outline-light" type="submit">
                   Search
-                </button>
+                </button> */}
               </form>
             </div>
           </div>
