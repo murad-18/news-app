@@ -1,13 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import magnifyLoading from "./magnifyLoading.gif";
 
-export class Spinner extends Component {
-  render() {
-    return (
-      <div className="text-center">
-        <img src={magnifyLoading} alt="loading-spinner.gif" />
-      </div>
-    );
-  }
-}
+const Spinner = () => {
+  return (
+    <div className="text-center">
+      <img src={magnifyLoading} alt="loading-spinner.gif" />
+    </div>
+  );
+};
 export default Spinner;
